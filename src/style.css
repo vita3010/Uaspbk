@@ -1,0 +1,67 @@
+/* src/style.css - Styling Global */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f6f9;
+  color: #333;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+#app-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  background-color: #343a40; /* Warna gelap untuk header */
+  color: white;
+  padding: 15px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.main-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-brand {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.nav-links .nav-item {
+  color: white;
+  text-decoration: none;
+  margin-left: 25px;
+  font-size: 1.1em;
+  transition: color 0.3s ease;
+}
+
+.nav-links .nav-item:hover,
+.nav-links .nav-item.router-link-active {
+  color: #007bff; /* Warna biru untuk link aktif/hover */
+}
+
+.app-main {
+  flex-grow: 1; /* Memungkinkan konten utama mengambil sisa ruang */
+  padding: 20px 0;
+}
+
+.app-footer {
+  background-color: #343a40;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+  font-size: 0.9em;
+  margin-top: auto; /* Mendorong footer ke bagian bawah */
+}
