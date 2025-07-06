@@ -4,10 +4,12 @@ import HomeView from '../views/HomeView.vue';
 import ItemListView from '../views/ItemListView.vue';
 import ItemDetailView from '../views/ItemDetailView.vue';
 import AddItemView from '../views/AddItemView.vue';
-import LoginView from '../views/LoginView.vue';      // Pastikan ini terimport
-import RegisterView from '../views/RegisterView.vue'; // Pastikan ini terimport
+import LoginView from '../views/LoginView.vue';
+import RegisterView from '../views/RegisterView.vue';
+import CartView from '../views/CartView.vue'; // New: Import CartView
+import FavoritesView from '../views/FavoritesView.vue'; // New: Import FavoritesView
 
-import { useAuthStore } from '../stores/authStore'; // Pastikan ini terimport
+import { useAuthStore } from '../stores/authStore';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -43,6 +45,16 @@ const router = createRouter({
       path: '/register',
       name: 'register',
       component: RegisterView
+    },
+    { // New: Rute Keranjang
+      path: '/cart',
+      name: 'cart',
+      component: CartView
+    },
+    { // New: Rute Favorit
+      path: '/favorites',
+      name: 'favorites',
+      component: FavoritesView
     }
   ]
 });

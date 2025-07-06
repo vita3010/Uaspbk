@@ -9,29 +9,35 @@ export const useAuthStore = defineStore('auth', {
     authError: null,
     authLoading: false,
   }),
+  getters: {
+    isAuthenticated: (state) => state.isLoggedIn,
+    currentUser: (state) => state.user,
+    isAdmin: (state) => state.user?.role === 'admin',
+    isUser: (state) => state.user?.role === 'user'
+  },
   actions: {
     async register(username, password) {
       this.authLoading = true;
       this.authError = null;
       try {
-        const existingUsers = await axios.get(`http://localhost:3000/users?username=${username}`);
-        if (existingUsers.data.length > 0) {
+        const res = await axios.get(`http://localhost:3000/users?username=${username}`);
+        if (res.data.length > 0) {
           this.authError = 'Username sudah terdaftar.';
-          alert('Username sudah terdaftar. Silakan gunakan username lain.');
+          alert(this.authError);
           return false;
         }
 
-        const response = await axios.post('http://localhost:3000/users', {
+        await axios.post('http://localhost:3000/users', {
           username,
           password,
           role: 'user'
         });
         alert('Registrasi berhasil! Silakan login.');
         return true;
-      } catch (error) {
-        this.authError = 'Registrasi gagal: ' + error.message;
-        console.error('Registration failed:', error);
-        alert('Registrasi gagal. Silakan coba lagi.');
+      } catch (err) {
+        this.authError = 'Registrasi gagal: ' + err.message;
+        console.error(err);
+        alert(this.authError);
         return false;
       } finally {
         this.authLoading = false;
@@ -42,23 +48,22 @@ export const useAuthStore = defineStore('auth', {
       this.authLoading = true;
       this.authError = null;
       try {
-        const response = await axios.get(`http://localhost:3000/users?username=${username}&password=${password}`);
-        if (response.data.length > 0) {
-          const userData = response.data[0];
-          this.user = { id: userData.id, username: userData.username, role: userData.role };
+        const res = await axios.get(`http://localhost:3000/users?username=${username}&password=${password}`);
+        if (res.data.length > 0) {
+          this.user = res.data[0];
           this.isLoggedIn = true;
           localStorage.setItem('loggedInUser', JSON.stringify(this.user));
           alert('Login berhasil!');
           return true;
         } else {
           this.authError = 'Username atau password salah.';
-          alert('Username atau password salah.');
+          alert(this.authError);
           return false;
         }
-      } catch (error) {
-        this.authError = 'Login gagal: ' + error.message;
-        console.error('Login failed:', error);
-        alert('Login gagal. Silakan coba lagi.');
+      } catch (err) {
+        this.authError = 'Login gagal: ' + err.message;
+        console.error(err);
+        alert(this.authError);
         return false;
       } finally {
         this.authLoading = false;
@@ -72,11 +77,5 @@ export const useAuthStore = defineStore('auth', {
       localStorage.removeItem('loggedInUser');
       alert('Anda telah logout.');
     }
-  },
-  getters: {
-    isAuthenticated: (state) => state.isLoggedIn,
-    currentUser: (state) => state.user,
-    isAdmin: (state) => state.user && state.user.role === 'admin',
-    isUser: (state) => state.user && state.user.role === 'user'
-  },
+  }
 });

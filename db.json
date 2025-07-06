@@ -17,14 +17,6 @@
       "imageUrl": "https://i.pinimg.com/736x/ca/49/dc/ca49dc37a84fd7a5f33fcd239ce88592.jpg"
     },
     {
-      "id": "4",
-      "name": "Console Game PS3 Bekas",
-      "description": "Berfungsi normal, termasuk 2 controller dan 3 game.",
-      "price": 1200000,
-      "category": "Elektronik",
-      "imageUrl": "https://i.pinimg.com/736x/25/66/27/2566274214992f22199b282ea4ea84d7.jpg"
-    },
-    {
       "id": "5",
       "name": "Pot Tanaman Keramik",
       "description": "Ukuran sedang, warna biru, cocok untuk tanaman hias.",
@@ -33,12 +25,20 @@
       "imageUrl": "https://i.pinimg.com/736x/26/f7/47/26f747eb31decafd59a75dca245cce32.jpg"
     },
     {
-      "id": "bda2",
-      "name": "meja ",
+      "id": "6",
+      "name": "meja",
       "description": "dari kayu jati",
       "price": 200000,
       "category": "furniture",
       "imageUrl": "https://i.pinimg.com/736x/a0/7a/30/a07a30217d341914e773d330dd039d65.jpg"
+    },
+    {
+      "id": "7",
+      "name": "Iphone 19",
+      "description": "barang masih bagus dan asih mulus bodynya",
+      "price": 20000000,
+      "category": "elektronik",
+      "imageUrl": "https://i.pinimg.com/736x/fe/83/da/fe83da29198299675591ca8dc0a102e7.jpg"
     }
   ],
   "users": [
@@ -67,6 +67,27 @@
       "username": "Vita",
       "password": "123",
       "role": "user"
+    },
+    {
+      "id": "251b",
+      "username": "liah",
+      "password": "123",
+      "role": "user"
+    }
+  ],
+  "carts": [
+    {
+      "id": "8684",
+      "itemId": "3",
+      "name": "Sepatu Olahraga Uk. 40",
+      "price": 200000,
+      "quantity": 1
+    }
+  ],
+  "favorites": [
+    {
+      "id": "1410",
+      "itemId": "5"
     }
   ]
 }

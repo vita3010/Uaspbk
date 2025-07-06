@@ -12,13 +12,24 @@
         <p class="detail-price">Harga: **Rp {{ itemStore.currentItem.price.toLocaleString('id-ID') }}**</p>
         <p class="detail-category">Kategori: {{ itemStore.currentItem.category }}</p>
 
-        <div v-if="authStore.isAdmin" class="actions">
-          <button @click="isEditing = true" class="button edit-button">Edit Barang</button>
-          <button @click="confirmDelete" class="button delete-button">Hapus Barang</button>
+        <div class="actions">
+          <!-- New: Tombol Tambah ke Keranjang -->
+          <button @click="addToCart(itemStore.currentItem)" class="button add-to-cart-button">
+            🛒 Tambah ke Keranjang
+          </button>
+          <!-- New: Tombol Tambah ke Favorit -->
+          <button @click="addFavorite(itemStore.currentItem)" class="button add-to-favorite-button">
+            ❤️ Tambah ke Favorit
+          </button>
+
+          <template v-if="authStore.isAdmin">
+            <button @click="isEditing = true" class="button edit-button">Edit Barang</button>
+            <button @click="confirmDelete" class="button delete-button">Hapus Barang</button>
+          </template>
+          <p v-else-if="authStore.isAuthenticated" class="info-message">Login sebagai Admin untuk mengedit atau menghapus barang ini.</p>
+          <p v-else class="info-message">Login untuk opsi edit/hapus.</p>
         </div>
-        <p v-else-if="authStore.isAuthenticated" class="info-message">Login sebagai Admin untuk mengedit atau menghapus barang ini.</p>
-        <p v-else class="info-message">Login untuk opsi edit/hapus.</p>
-        </template>
+      </template>
 
       <template v-else>
         <h2>Edit Barang</h2>
@@ -54,17 +65,20 @@
     <router-link to="/items" class="button back-to-list-button">Kembali ke Daftar Barang</router-link>
   </div>
 </template>
-
 <script setup>
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useItemStore } from '../stores/itemStore';
-import { useAuthStore } from '../stores/authStore'; // <-- BAGIAN YANG DITAMBAHKAN/PASTIKAN ADA
+import { useAuthStore } from '../stores/authStore';
+import { useCartStore } from '../stores/cartStore';
+import { useFavoriteStore } from '../stores/favoriteStore'; // ✅ Tambah ini
 
 const route = useRoute();
 const router = useRouter();
 const itemStore = useItemStore();
-const authStore = useAuthStore(); // <-- BAGIAN YANG DITAMBAHKAN/PASTIKAN ADA
+const authStore = useAuthStore();
+const cartStore = useCartStore(); // ✅ Pakai Pinia
+const favoriteStore = useFavoriteStore(); // ✅ Pakai Pinia
 
 const isEditing = ref(false);
 const editedItem = ref({});
@@ -82,8 +96,17 @@ onMounted(async () => {
   }
 });
 
+const addToCart = (itemData) => {
+  cartStore.addToCart(itemData); // ✅ Panggil dari Pinia
+  alert(`${itemData.name} ditambahkan ke keranjang!`);
+};
+
+const addFavorite = (itemData) => {
+  favoriteStore.addFavorite(itemData); // ✅ Panggil dari Pinia
+  alert(`${itemData.name} ditambahkan ke favorit!`);
+};
+
 const saveChanges = async () => {
-  // BAGIAN YANG DITAMBAHKAN: Pengecekan izin untuk menyimpan
   if (!authStore.isAdmin) {
     alert('Anda tidak memiliki izin untuk menyimpan perubahan.');
     return;
@@ -106,7 +129,6 @@ const cancelEdit = () => {
 };
 
 const confirmDelete = async () => {
-  // BAGIAN YANG DITAMBAHKAN: Pengecekan izin untuk menghapus
   if (!authStore.isAdmin) {
     alert('Anda tidak memiliki izin untuk menghapus barang ini.');
     return;
@@ -168,6 +190,7 @@ const confirmDelete = async () => {
 
 .actions {
   display: flex;
+  flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
   gap: 15px;
   margin-top: 20px;
 }
@@ -180,8 +203,30 @@ const confirmDelete = async () => {
   font-size: 1em;
   text-align: center;
   text-decoration: none;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Added transform for hover effect */
 }
+.button:hover {
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+/* New: Gaya untuk tombol Tambah ke Keranjang */
+.add-to-cart-button {
+  background-color: #007bff; /* Biru */
+  color: white;
+}
+.add-to-cart-button:hover {
+  background-color: #0056b3;
+}
+
+/* New: Gaya untuk tombol Tambah ke Favorit */
+.add-to-favorite-button {
+  background-color: #ffc107; /* Kuning */
+  color: #333;
+}
+.add-to-favorite-button:hover {
+  background-color: #e0a800;
+}
+
 .edit-button {
   background-color: #ffc107;
   color: #333;
@@ -215,6 +260,7 @@ const confirmDelete = async () => {
 }
 .edit-form input[type="text"],
 .edit-form input[type="number"],
+.edit-form input[type="url"], /* Added type="url" for image URL input */
 .edit-form textarea {
   padding: 10px;
   border: 1px solid #b0d8f9;
@@ -280,5 +326,15 @@ const confirmDelete = async () => {
   color: #007bff;
   font-style: italic;
   margin-top: 15px;
+}
+
+/* Responsive adjustments for buttons */
+@media (max-width: 600px) {
+  .actions {
+    flex-direction: column; /* Stack buttons vertically on small screens */
+  }
+  .button {
+    width: 100%; /* Make buttons full width */
+  }
 }
 </style>
